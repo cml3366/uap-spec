@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uap-spec.io/schema/v1/message-envelope.json",
+  "title": "UAP Message Envelope",
+  "description": "UAP 标准消息信封格式 v1.0",
+  "type": "object",
+  "required": ["uap_version", "envelope", "routing", "intent"],
+  "properties": {
+    "uap_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "description": "UAP 协议版本号",
+      "examples": ["1.0"]
+    },
+    "envelope": {
+      "type": "object",
+      "required": ["message_id", "timestamp"],
+      "properties": {
+        "message_id": {"type": "string", "format": "uuid", "description": "消息唯一 ID"},
+        "timestamp": {"type": "string", "format": "date-time"},
+        "ttl": {"type": "integer", "minimum": 1, "maximum": 3600, "default": 30, "description": "消息存活时间（秒）"},
+        "trace_id": {"type": "string", "description": "链路追踪 ID"},
+        "span_id": {"type": "string", "description": "当前 span ID"},
+        "parent_span_id": {"type": "string", "description": "父 span ID"}
+      },
+      "additionalProperties": false
+    },
+    "routing": {
+      "type": "object",
+      "required": ["from", "to", "access_tier"],
+      "properties": {
+        "from": {"type": "string", "pattern": "^did:uap:"},
+        "to": {"type": "string", "pattern": "^did:uap:"},
+        "reply_to": {"type": "string", "pattern": "^did:uap:"},
+        "access_tier": {
+          "type": "string",
+          "enum": ["open", "authenticated", "private"],
+          "description": "接入层级"
+        }
+      },
+      "additionalProperties": false
+    },
+    "auth": {
+      "type": "object",
+      "description": "鉴权层和私有层必须提供",
+      "properties": {
+        "capability_token": {"type": "string", "description": "JWT CapabilityToken"},
+        "signature": {"type": "string", "description": "消息数字签名 Ed25519:base64"},
+        "nonce": {"type": "string", "description": "防重放随机数"}
+      }
+    },
+    "intent": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "capability.invoke",
+            "capability.discover",
+            "capability.negotiate",
+            "task.delegate",
+            "task.status",
+            "task.cancel",
+            "session.open",
+            "session.close",
+            "event.subscribe",
+            "event.publish"
+          ]
+        },
+        "capability": {"type": "string", "description": "目标能力 ID，invoke 时必须"},
+        "version": {"type": "string", "description": "能力版本约束，如 ^1.0"},
+        "input": {"type": "object", "description": "能力输入参数"},
+        "options": {
+          "type": "object",
+          "properties": {
+            "response_format": {"type": "string", "enum": ["structured", "text", "stream"]},
+            "language": {"type": "string", "default": "zh-CN"},
+            "depth": {"type": "string", "enum": ["brief", "standard", "scholarly"]},
+            "async": {"type": "boolean", "default": false}
+          }
+        },
+        "extensions": {
+          "type": "object",
+          "description": "命名空间扩展字段，键必须包含冒号前缀如 openwen:depth"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,48 @@
+{
+  "_comment": "OpenWen 易经解析 Agent — UAP 能力清单示例",
+  "uap_version": "1.0",
+  "agent": {
+    "did": "did:uap:openwen:yijing-agent",
+    "name": "易经解析 Agent",
+    "description": "基于完整周易典籍的六十四卦深度解读，支持象辞爻辞、时位正应、卦变互卦分析",
+    "version": "1.2.0",
+    "access_tier": "authenticated",
+    "endpoint": "https://api.openwen.io/agents/yijing",
+    "icon_url": "https://api.openwen.io/static/icons/yijing.svg",
+    "tags": ["古典哲学", "易学", "决策支持", "中华文化"]
+  },
+  "capabilities": [
+    {
+      "id": "yijing.interpret",
+      "name": "卦象解读",
+      "description": "输入卦名或爻辞，返回深度义理解读，含象辞、彖辞、历代注疏精华",
+      "version": "1.0.0",
+      "access_tier": "authenticated",
+      "rate_limit": {"requests_per_minute": 20},
+      "avg_latency_ms": 2000,
+      "required_agents": []
+    },
+    {
+      "id": "yijing.hexagram.full",
+      "name": "完整卦象分析",
+      "description": "包含本卦、变卦、互卦的完整分析报告，适合学术研究",
+      "version": "1.0.0",
+      "access_tier": "authenticated",
+      "avg_latency_ms": 4500,
+      "required_agents": ["did:uap:openwen:classics-agent"]
+    },
+    {
+      "id": "yijing.search",
+      "name": "易经典籍检索",
+      "description": "全文检索周易及历代注疏，返回相关条目及出处",
+      "version": "1.0.0",
+      "access_tier": "open",
+      "rate_limit": {"requests_per_minute": 60},
+      "avg_latency_ms": 500
+    }
+  ],
+  "trust": {
+    "public_key": "z6MktExample...",
+    "cert_fingerprint": "sha256:example..."
+  }
+}

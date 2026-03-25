@@ -1,0 +1,41 @@
+{
+  "_comment": "示例：调用易经解析 Agent — 完整 UAP 消息信封",
+  "uap_version": "1.0",
+  "envelope": {
+    "message_id": "550e8400-e29b-41d4-a716-446655440000",
+    "timestamp": "2026-03-25T10:00:00Z",
+    "ttl": 30,
+    "trace_id": "trace-openwen-demo-001",
+    "span_id": "span-001"
+  },
+  "routing": {
+    "from": "did:uap:personal:user-maolin",
+    "to": "did:uap:openwen:yijing-agent",
+    "reply_to": "did:uap:personal:user-maolin:callback",
+    "access_tier": "authenticated"
+  },
+  "auth": {
+    "capability_token": "eyJhbGciOiJFZERTQSJ9...",
+    "signature": "Ed25519:base64encodedSignature..."
+  },
+  "intent": {
+    "type": "capability.invoke",
+    "capability": "yijing.interpret",
+    "version": "^1.0",
+    "input": {
+      "hexagram": "乾卦",
+      "question": "事业发展方向，当进则进还是守成待时？",
+      "context": "创业第三年，面临扩张与巩固的抉择"
+    },
+    "options": {
+      "response_format": "structured",
+      "language": "zh-CN",
+      "depth": "scholarly"
+    },
+    "extensions": {
+      "openwen:tradition": "王弼注本",
+      "openwen:cite_sources": true,
+      "openwen:include_modern_mapping": true
+    }
+  }
+}
